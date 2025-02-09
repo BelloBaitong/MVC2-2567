@@ -19,8 +19,8 @@ public class Owl extends Pet {
     public String getAdditionalInfo() {
         return String.valueOf(flightDistance);
     }
-    public boolean validate() {
-        return flightDistance >= 100; // บินได้เกิน 100 km เท่านั้นถึงผ่าน
-    }
+public int getFlightDistance() {
+    return flightDistance;
+}
     
 }

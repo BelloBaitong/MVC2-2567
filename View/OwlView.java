@@ -70,15 +70,10 @@ public class OwlView extends JFrame {
         return vaccineCountField.getText();
     }
 
-    public int getFlightDistance() {
-        try {
-            return Integer.parseInt(flightDistanceField.getText());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "โปรดป้อนค่าระยะทางบินเป็นตัวเลข!", "ข้อผิดพลาด", JOptionPane.ERROR_MESSAGE);
-            return -1; // คืนค่าไม่ถูกต้อง
-        }
+    public String getFlightDistance() {
+        return flightDistanceField.getText().trim();
     }
-
+    
     public void addSubmitListener(ActionListener listener) {
         submitButton.addActionListener(listener);
     }

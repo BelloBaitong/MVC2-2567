@@ -13,8 +13,10 @@ public abstract class Pet {
         this.vaccineCount = vaccineCount;
     }
 
-    public abstract boolean validate();
-
+    public boolean validate() {
+        return true; 
+    }
+    
     public abstract String getType();
 
     public abstract String getAdditionalInfo();

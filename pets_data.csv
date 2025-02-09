@@ -1,10 +1,7 @@
 ID,Type,HealthCheckDate,VaccineCount,AdditionalInfo
-73051691,Phoenix,2025-02-09,2,true
-75193939,Phoenix,2025-02-09,2,true
-89039603,Owl,2025-02-09,1,100
-54433054,Phoenix,2000-02-01,1,true
-41194222,Phoenix,2568-02-02,1,true
-51043257,Dragon,2000-01-01,1,30.0
+43521309,Phoenix,2655-01-01,1,true
+34994721,Dragon,2222-01-01,1,10.0
+43048126,Phoenix,1111-01-01,1,true
 
-AcceptedCount,6
-RejectedCount,4
+AcceptedCount,3
+RejectedCount,2

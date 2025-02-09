@@ -70,15 +70,10 @@ public class DragonView extends JFrame {
         return vaccineCountField.getText();
     }
 
-    public double getSmokePollution() {
-        try {
-            return Double.parseDouble(smokePollutionField.getText());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "โปรดป้อนค่าระดับมลพิษเป็นตัวเลข!", "ข้อผิดพลาด", JOptionPane.ERROR_MESSAGE);
-            return -1; // คืนค่าไม่ถูกต้อง
-        }
+    public String getSmokePollution() {
+        return smokePollutionField.getText().trim();
     }
-
+    
     public void addSubmitListener(ActionListener listener) {
         submitButton.addActionListener(listener);
     }

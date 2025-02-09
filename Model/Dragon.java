@@ -19,8 +19,8 @@ public class Dragon extends Pet {
     public String getAdditionalInfo() {
         return String.valueOf(smokePollution);
     }
-    public boolean validate() {
-        return smokePollution <= 70; // ระดับควันไม่เกิน 70% เท่านั้นถึงผ่าน
-    }
+    public double getSmokePollution() {
+        return smokePollution;
+}
     
 }

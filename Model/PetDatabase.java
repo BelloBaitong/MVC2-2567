@@ -13,20 +13,22 @@ public class PetDatabase {
 
     public PetDatabase() {
         this.pets = new ArrayList<>();
-        loadFromCSV(); // โหลดข้อมูลจากไฟล์ CSV เมื่อเริ่มโปรแกรม
+        loadFromCSV(); 
     }
 
+    public void incrementAcceptedCount() {
+        acceptedCount++; 
+    }
+    
+    public void incrementRejectedCount() {
+        rejectedCount++; 
+    }
+    
     public void addPet(Pet pet) {
-        if (pet.validate()) { //  ตรวจสอบว่า Pet ผ่านเงื่อนไขหรือไม่
-            pets.add(pet);
-            acceptedCount++; //  เพิ่มจำนวนสัตว์ที่รับเข้า
-            saveToCSV();
-        } else {
-            rejectedCount++; //  เพิ่มจำนวนสัตว์ที่ถูกปฏิเสธ
-            saveToCSV();
-        }
+        pets.add(pet); // เก็บข้อมูลสัตว์
+        saveToCSV();   // บันทึกลงไฟล์ CSV
     }
-
+    
     public List<Pet> getPets() {
         return pets;
     }
@@ -67,9 +69,9 @@ public void loadFromCSV() {
         reader.readLine(); // ข้ามบรรทัดหัวข้อ
         while ((line = reader.readLine()) != null) {
             if (line.startsWith("AcceptedCount")) {
-                acceptedCount = Integer.parseInt(line.split(",")[1]);
+                acceptedCount = Integer.parseInt(line.split(",")[1].trim());
             } else if (line.startsWith("RejectedCount")) {
-                rejectedCount = Integer.parseInt(line.split(",")[1]);
+                rejectedCount = Integer.parseInt(line.split(",")[1].trim());
             } else {
                 String[] data = line.split(",");
                 if (data.length < 5) continue;

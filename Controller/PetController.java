@@ -15,6 +15,10 @@ public class PetController {
     private Random random = new Random();
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/yyyy"); // ฟอร์แมตวันที่
 
+    private int acceptedCount = 0; // ตัวแปรนับสัตว์ที่รับเข้า
+    private int rejectedCount = 0; // ตัวแปรนับสัตว์ที่ถูกปฏิเสธ
+
+
     public PetController(PetDatabase database, MainView mainView) {
         this.database = database;
         this.mainView = mainView;
@@ -50,6 +54,77 @@ public class PetController {
         }
     }
 
+    private Integer parseFlightDistance(String flightText) {
+        try {
+            int distance = Integer.parseInt(flightText);
+            if (distance < 0) throw new NumberFormatException(); 
+            return distance;
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "โปรดป้อนค่าระยะทางบินเป็นตัวเลขที่ถูกต้อง!", "ข้อผิดพลาด", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    private Double parseSmokePollution(String smokeText) {
+        try {
+            double pollution = Double.parseDouble(smokeText);
+            if (pollution < 0) throw new NumberFormatException(); // ไม่ให้ค่าติดลบ
+            return pollution;
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "โปรดป้อนค่าระดับมลพิษเป็นตัวเลขที่ถูกต้อง!", "ข้อผิดพลาด", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    private boolean validatePhoenix(boolean fireproofCertificate) {
+        if (!fireproofCertificate) {
+            JOptionPane.showMessageDialog(null, "นกฟินิกซ์ต้องมีใบรับรองไฟไม่ลาม!", "ข้อผิดพลาด", JOptionPane.ERROR_MESSAGE);
+            database.incrementRejectedCount(); 
+            database.saveToCSV();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateOwl(int flightDistance) {
+        if (flightDistance < 100) {
+            JOptionPane.showMessageDialog(null, "นกฮูกต้องบินได้อย่างน้อย 100 km!", "ข้อผิดพลาด", JOptionPane.ERROR_MESSAGE);
+            database.incrementRejectedCount();
+            database.saveToCSV();
+            return false;
+        }
+        return true;
+    }
+    
+    private boolean validateDragon(double smokePollution) {
+        if (smokePollution > 70) {
+            JOptionPane.showMessageDialog(null, "มังกรต้องมีระดับมลพิษควันไม่เกิน 70%!", "ข้อผิดพลาด", JOptionPane.ERROR_MESSAGE);
+            database.incrementRejectedCount(); 
+            database.saveToCSV();
+            return false;
+        }
+        return true;
+    }
+    
+    public int getAcceptedCount() {
+        return acceptedCount;
+    }
+
+    public int getRejectedCount() {
+        return rejectedCount;
+    }
+    
+    public void addPet(Pet pet) {
+        if (pet.validate()) {
+            database.addPet(pet);
+            database.incrementAcceptedCount();
+            database.saveToCSV();
+        } else {
+            database.incrementRejectedCount();
+        }
+    }
+
+
     public void addPhoenix() {
         PhoenixView phoenixView = new PhoenixView();
         phoenixView.addSubmitListener(e -> {
@@ -58,9 +133,10 @@ public class PetController {
             boolean fireproof = phoenixView.getFireproofCertificate();
 
             if (healthCheckDate == null || vaccineCount == null) return;
+            if (!validatePhoenix(fireproof)) return;
 
             Phoenix phoenix = new Phoenix(generateId(), healthCheckDate, vaccineCount, fireproof);
-            database.addPet(phoenix);
+            addPet(phoenix);
             database.saveToCSV();
             mainView.showMessage(phoenix.validate() ? "นกฟินิกซ์ถูกเพิ่มแล้ว!" : " นกฟินิกซ์ไม่ผ่านเงื่อนไข!");
             phoenixView.dispose();
@@ -72,12 +148,15 @@ public class PetController {
         dragonView.addSubmitListener(e -> {
             LocalDate healthCheckDate = parseDate(dragonView.getHealthCheckDate());
             Integer vaccineCount = parseVaccineCount(dragonView.getVaccineCount());
-            Double smokePollution = dragonView.getSmokePollution();
+            Double smokePollution = parseSmokePollution(dragonView.getSmokePollution());
 
             if (healthCheckDate == null || vaccineCount == null) return;
 
+            if (!validateDragon(smokePollution)) return;
+
+
             Dragon dragon = new Dragon(generateId(), healthCheckDate, vaccineCount, smokePollution);
-            database.addPet(dragon);
+            addPet(dragon);
             database.saveToCSV();
             mainView.showMessage(dragon.validate() ? "มังกรถูกเพิ่มแล้ว!" : "มังกรไม่ผ่านเงื่อนไข!");
             dragonView.dispose();
@@ -89,9 +168,12 @@ public class PetController {
         owlView.addSubmitListener(e -> {
             LocalDate healthCheckDate = parseDate(owlView.getHealthCheckDate());
             Integer vaccineCount = parseVaccineCount(owlView.getVaccineCount());
-            Integer flightDistance = owlView.getFlightDistance();
+            Integer flightDistance = parseFlightDistance(owlView.getFlightDistance());
+
 
             if (healthCheckDate == null || vaccineCount == null) return;
+
+            if (!validateOwl(flightDistance)) return;
 
             Owl owl = new Owl(generateId(), healthCheckDate, vaccineCount, flightDistance);
             database.addPet(owl);

@@ -19,8 +19,8 @@ public class Phoenix extends Pet {
     public String getAdditionalInfo() {
         return String.valueOf(fireproofCertificate);
     }
-    public boolean validate() {
-        return fireproofCertificate; // ต้องมีใบรับรองไฟไม่ลามเท่านั้นถึงจะผ่าน
-    }
+    public boolean getFireproofCertificate() {
+    return fireproofCertificate;
+}
 }
 
