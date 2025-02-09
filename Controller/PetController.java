@@ -7,18 +7,15 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Random;
-import javax.swing.JOptionPane;
 
+//ควบคุมการทำงานระหว่าง View และ Model ของระบบสัตว์เวทมนตร์
 public class PetController {
-    private PetDatabase database;
-    private MainView mainView;
-    private Random random = new Random();
+    private PetDatabase database; // ฐานข้อมูลสัตว์
+    private MainView mainView; // หน้าหลักของระบบ
+    private Random random = new Random(); // ใช้สร้าง ID สุ่ม
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/yyyy"); // ฟอร์แมตวันที่
 
-    private int acceptedCount = 0; // ตัวแปรนับสัตว์ที่รับเข้า
-    private int rejectedCount = 0; // ตัวแปรนับสัตว์ที่ถูกปฏิเสธ
-
-
+//กำหนด EventListener ให้ปุ่มต่างๆ ใน MainView
     public PetController(PetDatabase database, MainView mainView) {
         this.database = database;
         this.mainView = mainView;
@@ -30,75 +27,77 @@ public class PetController {
         mainView.addExitButtonListener(e -> System.exit(0));
     }
 
+    //สร้าง ID สัตว์แบบสุ่ม
+
     private String generateId() {
         return String.format("%08d", random.nextInt(90000000) + 10000000);
     }
-
+//แปลงวันที่จาก String เป็น LocalDate
     private LocalDate parseDate(String dateText) {
         try {
             return LocalDate.parse(dateText, dateFormatter);
         } catch (DateTimeParseException e) {
-            JOptionPane.showMessageDialog(null, "รูปแบบวันที่ไม่ถูกต้อง! กรุณาใช้รูปแบบ วัน/เดือน/ปี");
+            mainView.showMessage("รูปแบบวันที่ไม่ถูกต้อง! กรุณาใช้รูปแบบ วัน/เดือน/ปี");
             return null;
         }
     }
-
+//แปลงข้อความเป็นจำนวนวัคซีน
     private Integer parseVaccineCount(String vaccineText) {
         try {
             int vaccineCount = Integer.parseInt(vaccineText);
             if (vaccineCount <= 0) throw new NumberFormatException();
             return vaccineCount;
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "จำนวนวัคซีนต้องเป็นเลขจำนวนเต็มบวก!");
+            mainView.showMessage( "จำนวนวัคซีนต้องเป็นเลขจำนวนเต็มบวก!");
             return null;
         }
     }
-
+//แปลงข้อความเป็นระยะทางบินของนกฮูก
     private Integer parseFlightDistance(String flightText) {
         try {
             int distance = Integer.parseInt(flightText);
             if (distance < 0) throw new NumberFormatException(); 
             return distance;
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "โปรดป้อนค่าระยะทางบินเป็นตัวเลขที่ถูกต้อง!", "ข้อผิดพลาด", JOptionPane.ERROR_MESSAGE);
+            mainView.showErrorMessage("โปรดป้อนค่าระยะทางบินเป็นตัวเลขที่ถูกต้อง!");
             return null;
         }
     }
-
+   // แปลงข้อความเป็นค่ามลพิษของมังกร
     private Double parseSmokePollution(String smokeText) {
         try {
             double pollution = Double.parseDouble(smokeText);
             if (pollution < 0) throw new NumberFormatException(); // ไม่ให้ค่าติดลบ
             return pollution;
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "โปรดป้อนค่าระดับมลพิษเป็นตัวเลขที่ถูกต้อง!", "ข้อผิดพลาด", JOptionPane.ERROR_MESSAGE);
+            mainView.showErrorMessage( "โปรดป้อนค่าระดับมลพิษเป็นตัวเลขที่ถูกต้อง!");
             return null;
         }
     }
-
+//ตรวจสอบเงื่อนไขของนกฟินิกซ์
     private boolean validatePhoenix(boolean fireproofCertificate) {
         if (!fireproofCertificate) {
-            JOptionPane.showMessageDialog(null, "นกฟินิกซ์ต้องมีใบรับรองไฟไม่ลาม!", "ข้อผิดพลาด", JOptionPane.ERROR_MESSAGE);
+            mainView.showErrorMessage("นกฟินิกซ์ต้องมีใบรับรองไฟไม่ลาม!");
             database.incrementRejectedCount(); 
             database.saveToCSV();
             return false;
         }
         return true;
     }
-
+//ตรวจสอบเงื่อนไขของนกฮูก
     private boolean validateOwl(int flightDistance) {
         if (flightDistance < 100) {
-            JOptionPane.showMessageDialog(null, "นกฮูกต้องบินได้อย่างน้อย 100 km!", "ข้อผิดพลาด", JOptionPane.ERROR_MESSAGE);
+            mainView.showErrorMessage( "นกฮูกต้องบินได้อย่างน้อย 100 km!");
             database.incrementRejectedCount();
             database.saveToCSV();
             return false;
         }
         return true;
     }
-    
+//ตรวจสอบเงื่อนไขของมังกร 
     private boolean validateDragon(double smokePollution) {
         if (smokePollution > 70) {
-            JOptionPane.showMessageDialog(null, "มังกรต้องมีระดับมลพิษควันไม่เกิน 70%!", "ข้อผิดพลาด", JOptionPane.ERROR_MESSAGE);
+            mainView.showErrorMessage("มังกรต้องมีระดับมลพิษควันไม่เกิน 70%!");
             database.incrementRejectedCount(); 
             database.saveToCSV();
             return false;
@@ -106,14 +105,7 @@ public class PetController {
         return true;
     }
     
-    public int getAcceptedCount() {
-        return acceptedCount;
-    }
-
-    public int getRejectedCount() {
-        return rejectedCount;
-    }
-    
+//เพิ่มสัตว์เข้าไปในฐานข้อมูล หากผ่านการตรวจสอบ    
     public void addPet(Pet pet) {
         if (pet.validate()) {
             database.addPet(pet);
@@ -124,7 +116,7 @@ public class PetController {
         }
     }
 
-
+//เปิดฟอร์มเพิ่มนกฟินิกซ์ และตรวจสอบข้อมูลก่อนบันทึก
     public void addPhoenix() {
         PhoenixView phoenixView = new PhoenixView();
         phoenixView.addSubmitListener(e -> {
@@ -142,7 +134,7 @@ public class PetController {
             phoenixView.dispose();
         });
     }
-
+//เปิดฟอร์มเพิ่มมังกร และตรวจสอบข้อมูลก่อนบันทึก
     public void addDragon() {
         DragonView dragonView = new DragonView();
         dragonView.addSubmitListener(e -> {
@@ -162,7 +154,7 @@ public class PetController {
             dragonView.dispose();
         });
     }
-
+//เปิดฟอร์มเพิ่มนกฮูก และตรวจสอบข้อมูลก่อนบันทึก
     public void addOwl() {
         OwlView owlView = new OwlView();
         owlView.addSubmitListener(e -> {
@@ -176,7 +168,7 @@ public class PetController {
             if (!validateOwl(flightDistance)) return;
 
             Owl owl = new Owl(generateId(), healthCheckDate, vaccineCount, flightDistance);
-            database.addPet(owl);
+            addPet(owl);
             database.saveToCSV();
             mainView.showMessage(owl.validate() ? "นกฮูกถูกเพิ่มแล้ว!" : "นกฮูกไม่ผ่านเงื่อนไข!");
             owlView.dispose();

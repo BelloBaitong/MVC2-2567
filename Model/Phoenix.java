@@ -2,8 +2,10 @@ package Model;
 
 import java.time.LocalDate;
 
+//คลาส Phoenix แทนข้อมูลของนกฟินิกซ์ ซึ่งเป็นสัตว์เลี้ยงชนิดหนึ่ง
+
 public class Phoenix extends Pet {
-    private boolean fireproofCertificate;
+    private boolean fireproofCertificate; // ใบรับรองป้องกันไฟไหม้
 
     public Phoenix(String id, LocalDate healthCheckDate, int vaccineCount, boolean fireproofCertificate) {
         super(id, healthCheckDate, vaccineCount);

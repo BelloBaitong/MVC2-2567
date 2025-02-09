@@ -3,22 +3,24 @@ package View;
 import javax.swing.*;
 import java.awt.*;
 
+//คลาส PhoenixView ใช้สำหรับแสดง UI เพิ่มข้อมูลนกฟินิกซ์
+
 public class PhoenixView extends JFrame {
-    private JTextField healthCheckDateField;
-    private JTextField vaccineCountField;
-    private JCheckBox fireproofCertificateCheckbox;
-    private JButton submitButton;
+    private JTextField healthCheckDateField; // ช่องป้อนข้อมูลวันที่ตรวจสุขภาพ
+    private JTextField vaccineCountField; // ช่องป้อนข้อมูลจำนวนวัคซีนที่ได้รับ
+    private JCheckBox fireproofCertificateCheckbox; // เช็คบ็อกซ์สำหรับใบรับรองไฟไม่ลาม
+    private JButton submitButton;  // ปุ่มกดยืนยัน
 
     public PhoenixView() {
         setTitle("เพิ่มนกฟินิกซ์");
-        setSize(400, 250); // ปรับขนาดให้กว้างขึ้น
+        setSize(400, 250); 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new GridBagLayout());
+        setLayout(new GridBagLayout()); // ใช้ GridBagLayout เพื่อให้จัดวางองค์ประกอบแบบยืดหยุ่น
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5); // เพิ่มระยะห่าง
+        gbc.insets = new Insets(5, 5, 5, 5); 
 
-        // 🔹 Label & Input: วันที่ตรวจสุขภาพ
+        //Input: วันที่ตรวจสุขภาพ
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
@@ -29,7 +31,7 @@ public class PhoenixView extends JFrame {
         healthCheckDateField.setPreferredSize(new Dimension(150, 25));
         add(healthCheckDateField, gbc);
 
-        // 🔹 Label & Input: จำนวนวัคซีน
+        //Input: จำนวนวัคซีน
         gbc.gridx = 0;
         gbc.gridy = 1;
         add(new JLabel("จำนวนวัคซีนที่ได้รับ:"), gbc);
@@ -39,14 +41,14 @@ public class PhoenixView extends JFrame {
         vaccineCountField.setPreferredSize(new Dimension(150, 25));
         add(vaccineCountField, gbc);
 
-        // 🔹 Checkbox: ใบรับรองไฟไม่ลาม
+        //Checkbox: ใบรับรองไฟไม่ลาม
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
         fireproofCertificateCheckbox = new JCheckBox("มีใบรับรองไฟไม่ลาม");
         add(fireproofCertificateCheckbox, gbc);
 
-        // 🔹 ปุ่มยืนยัน
+        //ปุ่มยืนยัน
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.gridwidth = 2;
@@ -57,7 +59,7 @@ public class PhoenixView extends JFrame {
         setVisible(true);
     }
 
-    // ✅ Getter สำหรับดึงค่าที่ผู้ใช้ป้อน
+    //สำหรับดึงค่าที่ผู้ใช้ป้อน
     public String getHealthCheckDate() {
         return healthCheckDateField.getText();
     }

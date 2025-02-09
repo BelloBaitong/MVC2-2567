@@ -12,14 +12,14 @@ public class OwlView extends JFrame {
 
     public OwlView() {
         setTitle("เพิ่มนกฮูก");
-        setSize(400, 250); // ปรับขนาดหน้าต่างให้เหมาะสม
+        setSize(400, 250); 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5); // เพิ่มระยะห่าง
+        gbc.insets = new Insets(5, 5, 5, 5); 
 
-        // 🔹 Label & Input: วันที่ตรวจสุขภาพ
+        //Input: วันที่ตรวจสุขภาพ
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
@@ -30,7 +30,7 @@ public class OwlView extends JFrame {
         healthCheckDateField.setPreferredSize(new Dimension(150, 25));
         add(healthCheckDateField, gbc);
 
-        // 🔹 Label & Input: จำนวนวัคซีน
+        //Input: จำนวนวัคซีน
         gbc.gridx = 0;
         gbc.gridy = 1;
         add(new JLabel("จำนวนวัคซีนที่ได้รับ:"), gbc);
@@ -40,7 +40,7 @@ public class OwlView extends JFrame {
         vaccineCountField.setPreferredSize(new Dimension(150, 25));
         add(vaccineCountField, gbc);
 
-        // 🔹 Label & Input: ระยะทางบินได้
+        //Input: ระยะทางบินได้
         gbc.gridx = 0;
         gbc.gridy = 2;
         add(new JLabel("ระยะทางบินได้ (km):"), gbc);
@@ -50,7 +50,7 @@ public class OwlView extends JFrame {
         flightDistanceField.setPreferredSize(new Dimension(150, 25));
         add(flightDistanceField, gbc);
 
-        // 🔹 ปุ่มยืนยัน
+        //ปุ่มยืนยัน
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.gridwidth = 2;
@@ -61,7 +61,7 @@ public class OwlView extends JFrame {
         setVisible(true);
     }
 
-    // ✅ Getter สำหรับดึงค่าที่ผู้ใช้ป้อน
+    //สำหรับดึงค่าที่ผู้ใช้ป้อน
     public String getHealthCheckDate() {
         return healthCheckDateField.getText();
     }
